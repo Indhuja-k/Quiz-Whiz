@@ -32,7 +32,7 @@
 
 | Home (Quiz Selection) | Quiz in Progress | Result & Leaderboard | Profile View |
 |------------------------|------------------|-----------------------|---------------|
-| ![Home](screenshots/quizwhiz_index.jpg) | ![Quiz](screenshots/quizwhiz_quiz.jpg) | ![Result](screenshots/quizwhiz_result.jpg) | ![Profile](screenshots/quizwhiz_profile.png) |
+| ![Home](quizwhiz_index.jpg) | ![Quiz](quizwhiz_quiz.jpg) | ![Result](quizwhiz_result.jpg) | ![Profile](quizwhiz_profile.jpg) |
 
 ---
 
