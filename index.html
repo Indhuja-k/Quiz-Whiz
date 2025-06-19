@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuizWhiz | Test Your Knowledge</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="gradient-bg">
+
+  <!-- ✅ Top Navbar -->
+  <header class="top-navbar">
+    <div class="navbar-left">🧠 QUIZWHIZ</div>
+    <div class="navbar-right">
+      <a href="profile.html" title="My Profile"><i class="fas fa-user"></i> Profile</a>
+      <a href="leaderboard.html" title="Leaderboard"><i class="fas fa-trophy"></i> Leaderboard</a>
+      <a href="#" onclick="logoutUser()" title="Logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </header>
+
+  <!-- ✅ Main Quiz Selection Area -->
+  <div class="main-container">
+    <section class="hero">
+      <p class="hero-subtitle">Challenge your brain with exciting questions</p>
+    </section>
+
+    <div class="selector-card">
+      <h2>Choose Your Challenge</h2>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="general">General Knowledge</option>
+          <option value="science">Science</option>
+          <option value="history">History</option>
+          <option value="sports">Sports</option>
+          <option value="technology">Technology</option>
+          <option value="entertainment">Entertainment</option>
+          <option value="math">Mathematics</option>
+          <option value="literature">Literature</option>
+          <option value="geography">Geography</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="difficulty">Difficulty</label>
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+
+      <button id="startBtn" class="start-button">Start Quiz</button>
+    </div>
+  </div>
+
+  <!-- ✅ Script -->
+  <script src="js/questions.js"></script>
+  <script>
+    // Ensure only logged-in users can access
+    const isLoggedIn = localStorage.getItem("quizUserLoggedIn");
+    if (isLoggedIn !== "true") {
+      window.location.href = "login.html";
+    }
+
+    // Start quiz
+    document.getElementById("startBtn").addEventListener("click", () => {
+      const category = document.getElementById("category").value;
+      const difficulty = document.getElementById("difficulty").value;
+      localStorage.setItem("quizCategory", category);
+      localStorage.setItem("quizDifficulty", difficulty);
+      window.location.href = "quiz.html";
+    });
+
+    // Logout user
+    function logoutUser() {
+      localStorage.removeItem("quizUserLoggedIn");
+      localStorage.removeItem("quizUserEmail");
+      localStorage.removeItem("quizUserName");
+      alert("You have been logged out.");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

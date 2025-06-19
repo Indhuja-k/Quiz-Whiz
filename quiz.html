@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuizWhiz - HTML Quiz</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <meta name="description" content="Play fun and challenging HTML quiz with QuizWhiz." />
+</head>
+<body class="gradient-bg">
+
+  <div class="container glass quiz-box">
+    <div class="quiz-header">
+      <h2 id="questionNo">Question 1</h2>
+
+      <!-- ✅ Text-Only Timer with effects -->
+      <div id="timerText" class="only-text-timer">60s</div>
+    </div>
+
+    <div id="question" class="quiz-question">Loading question...</div>
+
+    <div id="options" class="quiz-options">
+      <!-- Options will be dynamically inserted here -->
+    </div>
+  </div>
+
+  <script src="js/questions.js"></script>
+  <script src="js/quiz.js"></script>
+</body>
+</html>

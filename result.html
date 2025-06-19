@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuizWhiz - Results</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(to right, #1d2b64, #f8cdda);
+    }
+
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .hero-title {
+      font-size: 2.5rem;
+      color: #fff;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .result-card-panel {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 30px 25px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      max-width: 440px;
+      width: 100%;
+      color: white;
+    }
+
+    .result-section {
+      margin: 20px 0;
+      font-size: 1rem;
+    }
+
+    .result-score {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #00ffcc;
+      margin: 10px 0;
+    }
+
+    .result-message {
+      font-size: 1.1rem;
+      margin-top: 8px;
+    }
+
+    .start-button {
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      background-color: #00ffcc;
+      border: none;
+      border-radius: 6px;
+      color: #111;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .start-button:hover {
+      background-color: #00e6b8;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background-color: #ffffff33;
+      margin: 20px 0;
+    }
+
+    .leaderboard-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .leaderboard-list li {
+      background: rgba(255, 255, 255, 0.06);
+      margin-bottom: 6px;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+
+    .streak-highlight {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #00ffd5;
+      margin: 8px 0 0 0;
+    }
+  </style>
+</head>
+<body class="gradient-bg">
+
+  <div class="main-container">
+    <header class="hero">
+      <h1 class="hero-title">🎉 QuizWhiz Results</h1>
+    </header>
+
+    <div class="result-card-panel">
+      <div class="result-section">
+        <h2>Final Score</h2>
+        <p id="scoreText" class="result-score">0 / 0</p>
+        <p id="streakText" class="streak-highlight">🔥 Loading streak...</p>
+      </div>
+
+      <hr />
+
+      <div class="result-section">
+        <p><strong>Category:</strong> <span id="resultCategory">–</span></p>
+        <p style="margin-top: 10px;"><strong>Difficulty:</strong> <span id="resultDifficulty">–</span></p>
+      </div>
+
+      <hr />
+
+      <div class="result-section">
+        <p><strong>Feedback:</strong></p>
+        <p id="resultMessage" class="result-message">Loading...</p>
+      </div>
+
+      <hr />
+
+      <div class="result-section">
+        <h3>🏆 Leaderboard (Top 5)</h3>
+        <ul id="leaderboardList" class="leaderboard-list"></ul>
+      </div>
+    </div>
+
+    <button class="start-button" onclick="retryQuiz()">🔁 Retake Quiz</button>
+  </div>
+
+  <script>
+    const score = parseInt(localStorage.getItem("quizScore")) || 0;
+    const total = parseInt(localStorage.getItem("totalQuestions")) || 0;
+    const category = localStorage.getItem("quizCategory") || "Unknown";
+    const difficulty = localStorage.getItem("quizDifficulty") || "Unknown";
+    const userName = localStorage.getItem("quizUserName") || "Guest";
+
+    const percent = Math.round((score / total) * 100);
+    document.getElementById("scoreText").textContent = `${score} / ${total}`;
+    document.getElementById("resultCategory").textContent = capitalize(category);
+    document.getElementById("resultDifficulty").textContent = capitalize(difficulty);
+
+    // Personalized feedback
+    let message = "Better luck next time!";
+    if (percent === 100) {
+      message = "🥇 Perfect score! You're a genius!";
+    } else if (percent >= 80) {
+      message = "🎉 Excellent job!";
+    } else if (percent >= 50) {
+      message = "👍 Good effort!";
+    }
+    document.getElementById("resultMessage").textContent = message;
+
+    // 🔥 Streak logic
+    const today = new Date().toDateString();
+    const lastPlay = localStorage.getItem("lastQuizDate");
+    let streak = parseInt(localStorage.getItem("quizStreak") || "0");
+
+    if (lastPlay !== today) {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      if (lastPlay === yesterday.toDateString()) {
+        streak += 1;
+      } else {
+        streak = 1;
+      }
+      localStorage.setItem("lastQuizDate", today);
+      localStorage.setItem("quizStreak", streak);
+    }
+    document.getElementById("streakText").textContent = `🔥 ${streak}-day streak`;
+
+    // 🏆 Leaderboard logic
+    const leaderboard = JSON.parse(localStorage.getItem("quizLeaderboard") || "[]");
+    leaderboard.push({
+      name: userName,
+      score,
+      total,
+      category: capitalize(category),
+      difficulty: capitalize(difficulty),
+      percent,
+      time: new Date().toLocaleString()
+    });
+    leaderboard.sort((a, b) => b.percent - a.percent);
+    const top5 = leaderboard.slice(0, 5);
+    localStorage.setItem("quizLeaderboard", JSON.stringify(top5));
+
+    const listEl = document.getElementById("leaderboardList");
+    top5.forEach((entry, index) => {
+      const li = document.createElement("li");
+      li.innerHTML = `#${index + 1} <strong>${entry.name}</strong> – ${entry.score}/${entry.total} (${entry.category}) <em>– ${entry.time}</em>`;
+      listEl.appendChild(li);
+    });
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function retryQuiz() {
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+/* profile.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(to right, #1d2b64, #f8cdda); /* same as index */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  background: #111;
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.nav-right button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.profile-container {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 30px;
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  color: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  text-align: left;
+}
+
+.profile-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.6rem;
+}
+
+.profile-container label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 500;
+}
+
+.profile-container input,
+.profile-container select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.15);
+  color: #fff;
+}
+
+.profile-container input:disabled,
+.profile-container select:disabled {
+  opacity: 0.8;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.profile-container button {
+  flex: 1;
+  padding: 12px;
+  background-color: #00ffcc;
+  color: #111;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.profile-container button:hover {
+  background-color: #00e6b8;
+}
+
+.back-button {
+  margin-top: 25px;
+  width: 100%;
+  background-color: #1e1e1e !important;
+  color: #fff;
+  font-weight: 500;
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #333 !important;
+}

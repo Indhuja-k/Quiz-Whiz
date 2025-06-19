@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuizWhiz | My Profile</title>
+  <link rel="stylesheet" href="css/profile.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a2d9a86f04.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(to right, #0f2027, #2c5364);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: #111;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-right button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      margin-left: 15px;
+      cursor: pointer;
+    }
+
+    .main-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .profile-container {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 30px;
+      border-radius: 18px;
+      backdrop-filter: blur(10px);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .profile-container label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 500;
+    }
+
+    .profile-container input,
+    .profile-container select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 6px;
+      background: rgba(35, 184, 248, 0.15);
+      color: #fff;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .btn-group button,
+    .back-button {
+      flex: 1;
+      padding: 12px;
+      background-color: #00ffcc;
+      color: #111;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn-group button:hover,
+    .back-button:hover {
+      background-color: #00e6b8;
+    }
+
+    .back-button {
+      margin-top: 20px;
+      width: 40%;
+      display: block;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="gradient-bg">
+  <nav class="navbar">
+    <h1>QuizWhiz</h1>
+    <div class="nav-right">
+      <button onclick="toggleDarkMode()" title="Toggle dark mode"><i class="fas fa-moon"></i></button>
+      <button onclick="logout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <div class="profile-container">
+      <h2>My Profile</h2>
+      <form id="profileForm">
+        <label>Full Name</label>
+        <input type="text" id="profileName" disabled />
+
+        <label>Email</label>
+        <input type="email" id="profileEmail" disabled />
+
+        <label>Date of Birth</label>
+        <input type="date" id="profileDob" disabled />
+
+        <label>Gender</label>
+        <select id="profileGender" disabled>
+          <option value="">Select</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label>Phone</label>
+        <input type="tel" id="profilePhone" disabled />
+
+        <label>Country</label>
+        <select id="profileCountry" disabled>
+          <option value="">Select</option>
+          <option>India</option>
+          <option>United Kingdom</option>
+          <option>United States</option>
+          <option>Canada</option>
+          <option>Other</option>
+        </select>
+
+        <div class="btn-group">
+          <button type="button" id="editBtn">Edit</button>
+          <button type="submit" id="updateBtn" disabled>Update</button>
+        </div>
+        <button type="button" onclick="goHome()" class="back-button">← Back to Home</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const loggedEmail = localStorage.getItem("quizUserEmail");
+    const users = JSON.parse(localStorage.getItem("quizUsers")) || [];
+    const user = users.find(u => u.email === loggedEmail);
+
+    if (!loggedEmail || !user) {
+      alert("Please login to access your profile.");
+      window.location.href = "login.html";
+    }
+
+    const fields = ["profileName", "profileEmail", "profileDob", "profileGender", "profilePhone", "profileCountry"];
+    document.getElementById("profileName").value = user.name || "";
+    document.getElementById("profileEmail").value = user.email || "";
+    document.getElementById("profileDob").value = user.dob || "";
+    document.getElementById("profileGender").value = user.gender || "";
+    document.getElementById("profilePhone").value = user.phone || "";
+    document.getElementById("profileCountry").value = user.country || "";
+
+    const form = document.getElementById("profileForm");
+    const editBtn = document.getElementById("editBtn");
+    const updateBtn = document.getElementById("updateBtn");
+
+    editBtn.addEventListener("click", () => {
+      fields.forEach(id => {
+        if (id !== "profileEmail") {
+          document.getElementById(id).disabled = false;
+        }
+      });
+      updateBtn.disabled = false;
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const updatedUser = {
+        ...user,
+        name: document.getElementById("profileName").value,
+        dob: document.getElementById("profileDob").value,
+        gender: document.getElementById("profileGender").value,
+        phone: document.getElementById("profilePhone").value,
+        country: document.getElementById("profileCountry").value,
+      };
+
+      const index = users.findIndex(u => u.email === loggedEmail);
+      users[index] = updatedUser;
+      localStorage.setItem("quizUsers", JSON.stringify(users));
+      alert("Profile updated successfully!");
+
+      fields.forEach(id => document.getElementById(id).disabled = true);
+      updateBtn.disabled = true;
+    });
+
+    function logout() {
+      localStorage.removeItem("quizUserEmail");
+      localStorage.removeItem("quizUserName");
+      alert("Logged out successfully!");
+      window.location.href = "login.html";
+    }
+
+    function goHome() {
+      window.location.href = "index.html";
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+    }
+  </script>
+</body>
+</html>

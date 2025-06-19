@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuizWhiz | Register</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-yH+lYpYq1Kv0ZQf7aQWInH8VNwzOD6bD8x4BzKhZ5E6u5gjs4xQ1F6jD8F5KowR5X0s6ST06C+v2GuLzvIToXQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    .link-highlight {
+      color: #00aaff;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .link-highlight:hover {
+      color: #0077cc;
+      text-decoration: underline;
+    }
+    .eye-toggle {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #333;
+    }
+    .hero-title i {
+      margin-right: 8px;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body class="gradient-bg">
+
+  <div class="main-container">
+    <header class="hero">
+      <h1 class="hero-title"><i class="fas fa-brain"></i>QuizWhiz</h1>
+      <p class="hero-subtitle">Create your account</p>
+    </header>
+
+    <div class="selector-card">
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" placeholder="Your name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="regEmail">Email</label>
+        <input type="email" id="regEmail" placeholder="example@email.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="regPassword">Password</label>
+        <div style="position: relative;">
+          <input type="password" id="regPassword" placeholder="********" required oninput="checkPasswordStrength()" />
+          <button type="button" class="eye-toggle" onclick="togglePassword('regPassword', 'eyeIcon1')">
+            <i class="fas fa-eye" id="eyeIcon1"></i>
+          </button>
+        </div>
+        <div id="passwordStrength" style="margin-top:5px; font-weight: bold;"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div style="position: relative;">
+          <input type="password" id="confirmPassword" placeholder="********" required />
+          <button type="button" class="eye-toggle" onclick="togglePassword('confirmPassword', 'eyeIcon2')">
+            <i class="fas fa-eye" id="eyeIcon2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" required />
+      </div>
+
+      <div class="form-group">
+        <label>Gender</label>
+        <div class="gender-row">
+          <label><input type="radio" name="gender" value="Male" /> Male</label>
+          <label><input type="radio" name="gender" value="Female" /> Female</label>
+          <label><input type="radio" name="gender" value="Other" /> Other</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" placeholder="Optional" />
+      </div>
+
+      <div class="form-group">
+        <label for="country">Country</label>
+        <select id="country">
+          <option value="">Select</option>
+          <option value="India">India</option>
+          <option value="UK">United Kingdom</option>
+          <option value="USA">United States</option>
+          <option value="Canada">Canada</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <button class="start-button" onclick="registerUser()">Register</button>
+      <p class="hero-subtitle" style="margin-top: 10px;">
+        Already have an account? <a href="login.html" class="link-highlight">Login</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function checkPasswordStrength() {
+      const pwd = document.getElementById("regPassword").value;
+      const strengthEl = document.getElementById("passwordStrength");
+      let strength = 0;
+
+      if (pwd.length >= 8) strength++;
+      if (/[A-Z]/.test(pwd)) strength++;
+      if (/[0-9]/.test(pwd)) strength++;
+      if (/[\W_]/.test(pwd)) strength++;
+
+      switch (strength) {
+        case 0:
+        case 1:
+          strengthEl.textContent = "Weak";
+          strengthEl.style.color = "red";
+          break;
+        case 2:
+          strengthEl.textContent = "Moderate";
+          strengthEl.style.color = "orange";
+          break;
+        case 3:
+        case 4:
+          strengthEl.textContent = "Strong";
+          strengthEl.style.color = "green";
+          break;
+      }
+    }
+
+    function togglePassword(fieldId, iconId) {
+      const pwdInput = document.getElementById(fieldId);
+      const icon = document.getElementById(iconId);
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        pwdInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    function validateEmail(email) {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+      return regex.test(email);
+    }
+
+    function registerUser() {
+      const name = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const password = document.getElementById("regPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const dob = document.getElementById("dob").value;
+      const gender = document.querySelector('input[name="gender"]:checked')?.value;
+      const phone = document.getElementById("phone").value.trim();
+      const country = document.getElementById("country").value;
+
+      if (!name || !email || !password || !dob || !gender || !country) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      if (!validateEmail(email)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem("quizUsers")) || [];
+      const userExists = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+      if (userExists) {
+        alert("This email is already registered. Please login.");
+        return;
+      }
+
+      users.push({ name, email, password, dob, gender, phone, country });
+      localStorage.setItem("quizUsers", JSON.stringify(users));
+
+      alert("Registration successful! Please login.");
+      window.location.href = "login.html";
+    }
+
+    window.onload = () => {
+      document.getElementById("fullName").focus();
+    };
+  </script>
+</body>
+</html>

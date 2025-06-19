@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuizWhiz | Login</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      margin: 12px 0;
+      font-size: 1rem;
+    }
+    .modal-content button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .close-btn {
+      float: right;
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .password-container {
+      position: relative;
+    }
+    .togglePwdBtn {
+      position: absolute;
+      right: 10px;
+      top: 65%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #ffffff;
+    }
+
+    .link-highlight,
+    a#forgotPassLink {
+      color: #00d5ff;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .link-highlight:hover,
+    a#forgotPassLink:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="gradient-bg">
+
+  <div class="main-container">
+    <header class="hero">
+      <h1 class="hero-title">🧠QuizWhiz</h1>
+      <p class="hero-subtitle">Login to continue</p>
+    </header>
+
+    <div class="selector-card">
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="example@email.com" />
+      </div>
+
+      <div class="form-group password-container">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="********" />
+        <button type="button" id="toggleLoginPwd" class="togglePwdBtn" aria-label="Show/Hide Password">
+          <i class="fa-solid fa-eye"></i>
+        </button>
+      </div>
+
+      <button class="start-button" id="loginBtn" onclick="loginUser()">Login</button>
+
+      <p style="margin-top: 10px;">
+        <a href="#" id="forgotPassLink" class="link-highlight">Forgot Password?</a>
+      </p>
+
+      <p class="hero-subtitle" style="margin-top: 10px;">
+        Don't have an account?
+        <a href="register.html" class="link-highlight">Register</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div id="forgotPassModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <h3>Forgot Password</h3>
+      <input type="email" id="forgotEmail" placeholder="Enter your registered email" />
+      <button onclick="recoverPassword()">Recover Password</button>
+      <p id="forgotPassMessage" style="margin-top: 10px;"></p>
+    </div>
+  </div>
+
+  <script>
+    function loginUser() {
+      const loginBtn = document.getElementById('loginBtn');
+      loginBtn.disabled = true;
+
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      if (!email || !password) {
+        alert("Please fill in both email and password.");
+        loginBtn.disabled = false;
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("quizUsers")) || [];
+      const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+      if (user && user.password === password) {
+        localStorage.setItem("quizUserLoggedIn", "true");
+        localStorage.setItem("quizUserEmail", user.email);
+        localStorage.setItem("quizUserName", user.name);
+        alert("Login successful!");
+        window.location.href = "index.html";
+      } else {
+        alert("Invalid email or password.");
+        loginBtn.disabled = false;
+      }
+    }
+
+    document.getElementById('toggleLoginPwd').addEventListener('click', () => {
+      const pwd = document.getElementById('loginPassword');
+      const icon = document.querySelector('.togglePwdBtn i');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        pwd.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    });
+
+    // Forgot Password Modal
+    const modal = document.getElementById("forgotPassModal");
+    const closeModalBtn = document.getElementById("closeModal");
+    const forgotPassMessage = document.getElementById("forgotPassMessage");
+
+    document.getElementById("forgotPassLink").onclick = function(e) {
+      e.preventDefault();
+      forgotPassMessage.textContent = "";
+      modal.style.display = "flex";
+    };
+
+    closeModalBtn.onclick = function() {
+      modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+
+    function recoverPassword() {
+      const emailInput = document.getElementById("forgotEmail").value.trim();
+      const users = JSON.parse(localStorage.getItem("quizUsers")) || [];
+      const user = users.find(u => u.email.toLowerCase() === emailInput.toLowerCase());
+
+      if (user) {
+        forgotPassMessage.style.color = "green";
+        forgotPassMessage.textContent = `Your password is: ${user.password}`;
+      } else {
+        forgotPassMessage.style.color = "red";
+        forgotPassMessage.textContent = "No user found with this email.";
+      }
+    }
+
+    window.onload = () => {
+      document.getElementById("loginEmail").focus();
+    };
+  </script>
+</body>
+</html>
