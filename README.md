@@ -30,9 +30,9 @@
 
 ## 📸 Screenshots
 
-| Home (Quiz Selection) | Quiz in Progress | Result & Leaderboard |
-|------------------------|------------------|-----------------------|
-| ![Home](screenshots/home.png) | ![Quiz](screenshots/quiz.png) | ![Result](screenshots/result.png) |
+| Home (Quiz Selection) | Quiz in Progress | Result & Leaderboard | Profile View |
+|------------------------|------------------|-----------------------|---------------|
+| ![Home](screenshots/quizwhiz_index.jpg) | ![Quiz](screenshots/quizwhiz_quiz.jpg) | ![Result](screenshots/quizwhiz_result.jpg) | ![Profile](screenshots/quizwhiz_profile.png) |
 
 ---
 
